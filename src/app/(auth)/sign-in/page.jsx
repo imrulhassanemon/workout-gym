@@ -10,10 +10,31 @@ import {
   Mail,
   ShieldCheck,
 } from "lucide-react";
+import { signIn } from "@/lib/auth-client";
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+
+  const handelSignIn = async(e) => {
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
+
+    const email = formData.get("email")
+    const password = formData.get('password')
+
+    const {data, error} = await signIn.email({
+      email: email,
+      password:password,
+      callbackURL:'/'
+    })
+    console.log(data, error);
+
+  }
+
+
 
   return (
     <main className="min-h-screen bg-[#070B14] px-4 py-8 text-white sm:px-6">
@@ -100,7 +121,7 @@ export default function SignInPage() {
                 </p>
               </div>
 
-              <form className="space-y-5">
+              <form onSubmit={handelSignIn} className="space-y-5">
                 {/* Email */}
                 <div>
                   <label

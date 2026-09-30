@@ -18,6 +18,7 @@ import {
   LogOut,
   ChevronRight,
 } from "lucide-react";
+import { signOut } from "@/lib/auth-client";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -291,6 +292,7 @@ export default function ProfilePage() {
               />
 
               <button
+              onClick={() => signOut()}
                 type="button"
                 className="group flex w-full items-center gap-3 rounded-2xl border border-red-500/10 bg-red-500/5 p-4 text-left transition hover:border-red-500/20 hover:bg-red-500/10"
               >
