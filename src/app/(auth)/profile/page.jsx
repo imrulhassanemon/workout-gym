@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   User,
@@ -18,19 +18,39 @@ import {
   LogOut,
   ChevronRight,
 } from "lucide-react";
-import { signOut } from "@/lib/auth-client";
+import { signOut, updateUser, useSession } from "@/lib/auth-client";
+import Loading from "./loading";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
 
+  const {data} = useSession()
+  
   const [user, setUser] = useState({
-    name: "Imrul Hassan",
+    name: `${data?.user?.name}`,
     email: "imrul@example.com",
     bio: "Consistency over perfection. One workout at a time.",
     joined: "September 2026",
   });
-
+  console.log(data);
   const [formData, setFormData] = useState(user);
+
+  useEffect(() => {
+    if(data?.user){
+      const sessionUser ={
+        name: data.user.name || '',
+        email: data.user.email||'',
+
+      }
+      setUser(sessionUser)
+      setFormData(sessionUser)     
+    }
+  },[data, setUser, setFormData])
+
+  if(!data?.user){
+   return <Loading/>
+  }
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +64,10 @@ export default function ProfilePage() {
   const handleSave = () => {
     setUser(formData);
     setIsEditing(false);
+    updateUser({
+      name:formData.name,
+    })
+    console.log(formData);
   };
 
   const handleCancel = () => {
@@ -81,7 +105,7 @@ export default function ProfilePage() {
                 {/* Avatar */}
                 <div className="relative">
                   <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-[#CCFF00] text-3xl font-black text-black shadow-[0_0_35px_rgba(204,255,0,0.12)]">
-                    {user.name.charAt(0)}
+                    {user?.name?.charAt(0)}
                   </div>
 
                   <button
@@ -194,6 +218,7 @@ export default function ProfilePage() {
                     value={formData.email}
                     onChange={handleChange}
                     type="email"
+                    readOnly
                     className="h-12 w-full rounded-xl border border-white/10 bg-[#070B14] px-4 text-sm text-white outline-none transition focus:border-[#CCFF00]/50 focus:ring-2 focus:ring-[#CCFF00]/10"
                   />
                 </div>

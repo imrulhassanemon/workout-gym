@@ -34,6 +34,14 @@ export default function SignInPage() {
 
   }
 
+const handleGooleSignIn = async () => {
+  const {data, error} = await signIn.social({
+    provider:'google',
+    callbackURL:'/'
+  })
+  console.log(data, error);
+}
+
 
 
   return (
@@ -228,6 +236,8 @@ export default function SignInPage() {
                 </button>
               </form>
 
+              
+
               {/* Divider */}
               <div className="my-8 flex items-center gap-4">
                 <div className="h-px flex-1 bg-white/10" />
@@ -241,6 +251,7 @@ export default function SignInPage() {
 
               {/* Google Button */}
               <button
+              onClick={handleGooleSignIn}
                 type="button"
                 className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] text-sm font-medium text-slate-200 transition hover:border-white/20 hover:bg-white/[0.06]"
               >

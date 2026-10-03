@@ -5,6 +5,12 @@ import Link from "next/link";
 import { Menu, X, Dumbbell, Bookmark, User } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 
+
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const {data} = useSession()
 const navLinks = [
   {
     name: "Workouts",
@@ -14,13 +20,11 @@ const navLinks = [
     name: "My Plan",
     href: "/my-plan",
   },
+  ...(data?.session?[{
+    name:"Profile",
+    href:'/profile'
+  }]:[])
 ];
-
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const {data} = useSession()
-  console.log(data);
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#070B14]/90 backdrop-blur-xl">
